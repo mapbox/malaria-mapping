@@ -96,6 +96,8 @@
     playControl.addEventListener('click', setPlay);
     styleByDay(0);
   });
+  // Trigger automation
+  setPlay();
 
   function styleByDay(day) {
     var layers = ['malaria-buildings-inner', 'malaria-buildings-outer', 'malaria-buildings-most-outer', 'malaria-buildings-poly'];
