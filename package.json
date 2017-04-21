@@ -28,7 +28,6 @@
     "commander": "^2.9.0",
     "progress-stream": "^2.0.0",
     "split": "^1.0.0",
-    "stringify-stream": "^1.0.5",
-    "which-polygon": "^2.1.0"
+    "stringify-stream": "^1.0.5"
   }
 }

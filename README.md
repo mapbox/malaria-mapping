@@ -57,6 +57,6 @@ rm malaria_buildings_low.mbtiles
 7. Calculate buildings added by day and country
 
 ```bash
-./by-country.js -i malaria_buildings_day_centroid.geojson -o malaria_countries_buildings_day.geojson
+./building-totals.js -i malaria_buildings_day_centroid.geojson -o malaria_countries_buildings_day.geojson
 ```
 
