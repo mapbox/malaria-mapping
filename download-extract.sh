@@ -21,6 +21,8 @@ function merge() {
 }
 
 function download_files() {
+    echo 'Downloading Zimbabwe'
+    wget https://s3.amazonaws.com/mapbox/osm-qa-tiles/latest.country/zimbabwe.mbtiles.gz
     echo 'Downloading Zambia'
     wget https://s3.amazonaws.com/mapbox/osm-qa-tiles/latest.country/zambia.mbtiles.gz
     echo 'Downloading Botswana'
