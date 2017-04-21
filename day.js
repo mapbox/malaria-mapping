@@ -3,14 +3,20 @@
 
 const program = require('commander');
 const fs = require('fs');
-const turf = require('@turf/turf');
-const stringify = require('stringify-stream');
 const split = require('split');
+const stringify = require('stringify-stream');
 const stream = require('stream');
 
-const centroidStream = new stream.Transform( { objectMode: true } );
-centroidStream._transform = function (feature, encoding, done) {
-  this.push(turf.centroid(feature));
+const dateStream = new stream.Transform({ objectMode: true });
+dateStream._transform = function (feature, encoding, done) {
+  const timestamp = new Date(feature.properties['@timestamp'] * 1000);
+  const start = new Date(timestamp.getFullYear(), 0, 0);
+  const diff = timestamp - start;
+  const oneDay = 1000 * 60 * 60 * 24;
+  const day = Math.floor(diff / oneDay);
+
+  feature.properties["@day"] = day;
+  this.push(feature);
   done();
 };
 
@@ -22,7 +28,7 @@ program
 if (program.input && program.output) {
   fs.createReadStream(program.input)
     .pipe(split(JSON.parse, null, { trailing: false }))
-    .pipe(centroidStream)
+    .pipe(dateStream)
     .pipe(stringify())
     .pipe(fs.createWriteStream(program.output));
 } else {

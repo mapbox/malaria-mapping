@@ -38,7 +38,7 @@ function download_files() {
     gunzip *.gz
 
     echo 'Merging extracts'
-    local dest="malaria.mbtiles"
+    local dest="malaria.qa.mbtiles"
     cp zambia.mbtiles "$dest"
 
     merge zambia.mbtiles "$dest"
