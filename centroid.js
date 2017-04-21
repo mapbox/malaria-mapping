@@ -10,7 +10,10 @@ const stream = require('stream');
 
 const centroidStream = new stream.Transform( { objectMode: true } );
 centroidStream._transform = function (feature, encoding, done) {
-  this.push(turf.centroid(feature));
+  // Shave away all attributes except day for centroid features
+  const centroidFeature = turf.centroid(feature);
+  centroidFeature.properties = feature.properties;
+  this.push(centroidFeature);
   done();
 };
 

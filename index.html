@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <meta charset=utf-8 />
+  <title>Malaria Mapping</title>
+  <link href='https://www.mapbox.com/base/latest/base.css' rel='stylesheet' />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.css' rel='stylesheet' />
+  <style>
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  #map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+  }
+
+  #legend {
+    color: rgba(0, 0, 0, 0.75);
+  }
+
+  .fill-control {
+    background-color: #505050;
+  }
+
+  .control-container {
+    padding: 0 0 0 40px;
+  }
+
+  .playback {
+    background-image: url(img/play.svg);
+    background-color: transparent;
+    background-repeat: no-repeat;
+    width: 40px;
+    height: 40px;
+    border-color: rgba(0, 0, 0, 0.75);
+  }
+
+  .playback.pause {
+    background-image: url(img/pause.svg);
+  }
+
+  .playback:hover {
+    background-color: #373737;
+  }
+
+  .lifted {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
+  }
+
+  #counter {
+    min-width: 280px;
+  }
+
+  </style>
+</head>
+
+<body>
+  <div id="counter" class="dark fill-navy center pin-topleft z1 pad1 col3">
+    <h4>Buildings Mapped</h4>
+    <h2 class="fancy" id="time">Day 1 </h2>
+    <div class="clearfix space-bottom">
+      <div class="contain control-container round fill-control lifted">
+        <button id="play-control" class="button playback play pin-bottomleft round-left keyline-right"></button>
+        <div class="pad1y pad2x contain round-right">
+          <input id="range" class="col12" type="range" min="0" max="180" step="1" value="0">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="map"></div>
+  <script>
+  var mobile = document.documentElement.clientHeight <= 500;
+  mapboxgl.accessToken = 'pk.eyJ1IjoibHVrYXNtYXJ0aW5lbGxpIiwiYSI6ImNqMXMyYTRuejAwOHkzM3Frbjg1ZW9kNnAifQ.F5tkdGnKJMv4yaYZNOTJ5w';
+  window.map = new mapboxgl.Map({
+    container: "map", // container id
+    style: "mapbox://styles/lukasmartinelli/cj1rztb6o000g2st2zlb7mp7t", //stylesheet location
+    center: [-83.04981, 42.3361], // starting position
+		hash: true
+  });
+
+  var playControl = document.getElementById('play-control');
+  var range = document.getElementById('range');
+  var time = document.getElementById('time');
+
+  var tally = 0; // The current index in the layers array we are showing.
+  var playback = false;
+  var max = range.max;
+
+  map.on('load', function() {
+    playControl.addEventListener('click', setPlay);
+    styleByDay(0);
+  });
+
+  function styleByDay(day) {
+    var layers = ['malaria-buildings-inner', 'malaria-buildings-outer', 'malaria-buildings-most-outer', 'malaria-buildings-poly'];
+    var filter = ["<=", "@day", day];
+
+	  console.log(filter);
+    layers.forEach(function(l) {
+      map.setFilter(l, filter);
+    })
+
+  }
+
+
+
+  // Add events.
+  range.addEventListener('input', function() {
+    if (playback) clearPlayback();
+    play(parseInt(range.value, 10));
+  });
+
+
+  function clearPlayback() {
+    window.clearInterval(playback);
+    playControl.classList.remove('pause');
+    playControl.classList.add('play');
+    playback = false;
+  }
+
+  function setPlay() {
+    if (playback) return clearPlayback();
+    playControl.classList.remove('play');
+    playControl.classList.add('pause');
+    playback = window.setInterval(function() {
+      var value = parseInt(range.value, 10);
+      play(value + 1);
+    }, 400);
+  }
+
+  function play(v) {
+    range.value = v;
+		time.innerHTML = 'Day ' + range.value;
+
+    styleByDay(v);
+    if (v === 180) {
+      range.value = 0;
+      clearPlayback();
+    }
+  }
+
+  </script>
+</body>
+
+</html>
