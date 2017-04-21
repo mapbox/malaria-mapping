@@ -10,11 +10,10 @@ const stream = require('stream');
 const dateStream = new stream.Transform({ objectMode: true });
 dateStream._transform = function (feature, encoding, done) {
   const timestamp = new Date(feature.properties['@timestamp'] * 1000);
-  const start = new Date(2016, 7, 1);
+  const start = new Date(2016, 6, 1);
   const diff = timestamp - start;
   const oneDay = 1000 * 60 * 60 * 24;
   const day = Math.floor(diff / oneDay);
-
   feature.properties["@day"] = day;
   this.push(feature);
   done();

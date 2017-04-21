@@ -26,10 +26,10 @@ npm install -g osm-qa-filter
 ```bash
 osm-qa-filter \
     -m malaria.qa.mbtiles -o malaria_buildings.geojson \
-    --filter '["all", ["has", "building"], ["@timestamp", ">=", 1467331200]]'
+    --filter '["all", ["has", "building"], [">=", "@timestamp", 1467331200]]'
 ```
 
-3. Add the day since 1st of August as `@day` attribute to the features
+3. Add the date as attribute to the features.
 
 ```bash
 ./day.js -i malaria_buildings.geojson -o malaria_buildings_day.geojson
@@ -46,9 +46,9 @@ osm-qa-filter \
 
 ```bash
 tippecanoe --layer malaria_building -o malaria_buildings.mbtiles --include "@day" --minimum-zoom=11 --maximum-zoom=13 < malaria_buildings_day.geojson
-tippecanoe --layer malaria_building -o malaria_buildings_low.mbtiles --include "@day" --minimum-zoom=5 --maximum-zoom=10 < malaria_buildings_day_centroid.geojson
+tippecanoe --layer malaria_building -o malaria_buildings_low.mbtiles --include "@day" --minimum-zoom=0 --maximum-zoom=10 < malaria_buildings_day_centroid.geojson
 ./patch.sh malaria_buildings_low.mbtiles malaria_buildings.mbtiles
-echo "update metadata set value = 5 where name = 'minzoom'" | sqlite3 malaria_buildings.mbtiles
+echo "update metadata set value=0 where name = 'minzoom'" | sqlite3 malaria_buildings.mbtiles
 rm malaria_buildings_low.mbtiles
 ```
 
@@ -57,6 +57,6 @@ rm malaria_buildings_low.mbtiles
 7. Calculate buildings added by day and country
 
 ```bash
-./building-totals.js -i malaria_buildings_day_centroid.geojson -o malaria_countries_buildings_day.geojson
+./building-totals.js -i malaria_buildings_day_centroid.geojson -o malaria_buildings_by_day.json
 ```
 

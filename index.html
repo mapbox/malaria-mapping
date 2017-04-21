@@ -6,6 +6,7 @@
   <title>Malaria Mapping</title>
   <link href='https://www.mapbox.com/base/latest/base.css' rel='stylesheet' />
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.css' rel='stylesheet' />
   <style>
   body {
@@ -26,6 +27,19 @@
 
   .fill-control {
     background-color: #505050;
+  }
+
+  .flag {
+    display: inline;
+    max-width: 30px;
+  }
+
+  .button {
+    display: inline-block;
+    min-width: 120px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    text-align: left;
   }
 
   .control-container {
@@ -54,25 +68,89 @@
   }
 
   #counter {
-    min-width: 280px;
+    width: 100%;
   }
 
+	.sidebar {
+		position:absolute;
+		top:0;
+		bottom:0;
+		width:360px;
+	}
+	.sidebar-inner {
+		display:-webkit-box;
+		display:flex;
+		-webkit-box-orient:vertical;
+		flex-direction:column;
+		height:100%;
+	}
+	.sidebar-inner .flex-scroll {
+		overflow-y:scroll;
+		min-height:0;
+		-webkit-box-flex:1;
+		flex:1;
+	}
   </style>
 </head>
 
 <body>
-  <div id="counter" class="dark fill-navy center pin-topleft z1 pad1 col3">
-    <h4>Buildings Mapped</h4>
-    <h2 class="fancy" id="time">Day 1 </h2>
-    <div class="clearfix space-bottom">
-      <div class="contain control-container round fill-control lifted">
-        <button id="play-control" class="button playback play pin-bottomleft round-left keyline-right"></button>
-        <div class="pad1y pad2x contain round-right">
-          <input id="range" class="col12" type="range" min="0" max="180" step="1" value="0">
+
+<div class="sidebar pin-topleft pin-bottomleft pad1 z1">
+  <div class="sidebar-inner fill-navy dark round sidebar-inner">
+    <div class="flex-scroll scroll-styled pad2" id="narrative">
+      <div id="counter" class="dark fill-navy center pad1 col3">
+        <h4>Buildings Mapped</h4>
+        <h2 class="fancy" id="time">01-07-16</h2>
+        <div class="clearfix space-bottom">
+          <div class="contain control-container round fill-control lifted">
+            <button id="play-control" class="button playback play pin-bottomleft round-left keyline-right"></button>
+            <div class="pad1y pad2x contain round-right">
+              <input id="range" class="col12" type="range" min="0" max="180" step="1" value="0">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tourStop">
+        <h2 class="green">Eliminating Malaria through Mapping</h2>
+        <p>
+By mapping buildings, volunteers from all over the world contributed to the map, directly contributing to malaria elimination efforts.
+        </p>
+        <p></p>
+        <h2>Mapping Projects</h2>
+        <p>Over 350'000 buildings have been mapped since 2016.</p>
+        <div class="button fill-navy-dark dark">
+          <img class="flag" src="/img/zimbabwe.png" alt="Zimbabwe" />
+          <span> Zimbabwe</span>
+        </div>
+        <div class="button fill-navy-dark dark">
+          <img class="flag" src="/img/zambia.png" alt="Zambia" />
+          <span> Zambia</span>
+        </div>
+        <div class="button fill-navy-dark dark">
+          <img class="flag" src="/img/botswana.png" alt="Botswana" />
+          <span> Botswana</span>
+        </div>
+        <div class="button fill-navy-dark dark">
+          <img class="flag" src="/img/laos.png" alt="Laos" />
+          <span> Laos</span>
+        </div>
+        <div class="button fill-navy-dark dark">
+          <img class="flag" src="/img/cambodia.png" alt="Cambodia" />
+          <span> Cambodia</span>
+        </div>
+        <div class="button fill-navy-dark dark">
+          <img class="flag" src="/img/honduras.png" alt="Honduras" />
+          <span> Honduras</span>
+        </div>
+        <div class="button fill-navy-dark dark">
+          <img class="flag" src="/img/guatemala.png" alt="Guatemala" />
+          <span> Guatemala</span>
         </div>
       </div>
     </div>
   </div>
+</div>
   <div id="map"></div>
   <script>
   var mobile = document.documentElement.clientHeight <= 500;
@@ -80,30 +158,35 @@
   window.map = new mapboxgl.Map({
     container: "map", // container id
     style: "mapbox://styles/lukasmartinelli/cj1rztb6o000g2st2zlb7mp7t", //stylesheet location
-    center: [-83.04981, 42.3361], // starting position
-		hash: true
+    center: [25.8499, -17.8597], // starting position
+    zoom: 12,
+    maxZoom: 14,
+    hash: true
   });
 
   var playControl = document.getElementById('play-control');
   var range = document.getElementById('range');
   var time = document.getElementById('time');
 
+  var startDate = new Date(2016, 6, 1);
   var tally = 0; // The current index in the layers array we are showing.
   var playback = false;
   var max = range.max;
 
-  map.on('load', function() {
-    playControl.addEventListener('click', setPlay);
-    styleByDay(0);
+  loadBuildingStats(function(stats) {
+    map.on('load', function() {
+      playControl.addEventListener('click', setPlay);
+      styleByDay(0);
+    });
   });
   // Trigger automation
   setPlay();
 
   function styleByDay(day) {
-    var layers = ['malaria-buildings-inner', 'malaria-buildings-outer', 'malaria-buildings-most-outer', 'malaria-buildings-poly'];
+    var layers = ['malaria-building-point', 'malaria-building-glow', 'malaria-building-shape'];
     var filter = ["<=", "@day", day];
 
-	  console.log(filter);
+    console.log(filter);
     layers.forEach(function(l) {
       map.setFilter(l, filter);
     })
@@ -117,6 +200,18 @@
     if (playback) clearPlayback();
     play(parseInt(range.value, 10));
   });
+
+  function loadBuildingStats(callback) {
+    var xmlhttp;
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function(){
+      if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
+        callback(JSON.parse(xmlhttp.responseText));
+      }
+    }
+    xmlhttp.open("GET", "/malaria_buildings_by_day.json", true);
+    xmlhttp.send();
+  }
 
 
   function clearPlayback() {
@@ -138,13 +233,9 @@
 
   function play(v) {
     range.value = v;
-		time.innerHTML = 'Day ' + range.value;
-
+    const date = moment(startDate).add(range.value, 'days');
+    time.innerHTML = date.format('DD-MM-YY');
     styleByDay(v);
-    if (v === 180) {
-      range.value = 0;
-      clearPlayback();
-    }
   }
 
   </script>
