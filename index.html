@@ -21,8 +21,24 @@
     width: 100%;
   }
 
+  #buildings {
+    color: rgba(19, 182, 238, 0.9);
+  }
+
   #legend {
     color: rgba(0, 0, 0, 0.75);
+  }
+
+  .dark.button {
+    background-color: rgba(0, 12, 26, 0.41);
+  }
+
+  .button:hover, .button.active {
+    background-color: #52a1d8;
+  }
+
+  .fill-bg {
+    background-color: rgb(47, 48, 54);
   }
 
   .fill-control {
@@ -34,7 +50,7 @@
     max-width: 30px;
   }
 
-  .button {
+  .tourStop .button {
     display: inline-block;
     min-width: 120px;
     margin-right: 5px;
@@ -75,7 +91,7 @@
 		position:absolute;
 		top:0;
 		bottom:0;
-		width:360px;
+		width: 360px;
 	}
 	.sidebar-inner {
 		display:-webkit-box;
@@ -96,27 +112,27 @@
 <body>
 
 <div class="sidebar pin-topleft pin-bottomleft z1">
-  <div class="sidebar-inner fill-navy dark round sidebar-inner">
+  <div class="sidebar-inner fill-bg dark round sidebar-inner">
     <div class="flex-scroll scroll-styled pad2" id="narrative">
-      <div id="counter" class="dark fill-navy center pad1 col3">
-        <h4>Buildings Mapped</h4>
-        <h2 class="fancy" id="time">01-07-16</h2>
+      <h1>Eliminating Malaria through Mapping</h1>
+      <p>
+By mapping buildings, volunteers from all over the world contributed to the map, directly contributing to malaria elimination efforts.
+      </p>
+      <div id="counter" class="dark center pad1 col3">
         <div class="clearfix space-bottom">
           <div class="contain control-container round fill-control lifted">
             <button id="play-control" class="button playback play pin-bottomleft round-left keyline-right"></button>
             <div class="pad1y pad2x contain round-right">
-              <input id="range" class="col12" type="range" min="0" max="180" step="1" value="0">
+              <input id="range" class="col12" type="range" min="0" max="294" step="1" value="0">
             </div>
           </div>
         </div>
+        <h2 class="fancy" id="buildings">5012</h2>
+        <h4>buildings mapped by</h4>
+        <h3 class="fancy" id="time">01-07-16</h3>
       </div>
 
       <div class="tourStop">
-        <h2 class="green">Eliminating Malaria through Mapping</h2>
-        <p>
-By mapping buildings, volunteers from all over the world contributed to the map, directly contributing to malaria elimination efforts.
-        </p>
-        <p></p>
         <h2>Mapping Projects</h2>
         <p>Over 350'000 buildings have been mapped since 2016.</p>
         <div id="zimbabwe" class="button fill-navy-dark dark">
@@ -167,15 +183,18 @@ By mapping buildings, volunteers from all over the world contributed to the map,
   var playControl = document.getElementById('play-control');
   var range = document.getElementById('range');
   var time = document.getElementById('time');
+  var buildings = document.getElementById('buildings');
 
   var startDate = new Date(2016, 6, 1);
   var tally = 0; // The current index in the layers array we are showing.
   var playback = false;
   var max = range.max;
 
+  var dayStats = {};
   loadBuildingStats(function(stats) {
     map.on('load', function() {
       playControl.addEventListener('click', setPlay);
+      dayStats = stats;
       styleByDay(0);
     });
   });
@@ -185,15 +204,11 @@ By mapping buildings, volunteers from all over the world contributed to the map,
   function styleByDay(day) {
     var layers = ['malaria-building-point', 'malaria-building-glow', 'malaria-building-shape'];
     var filter = ["<=", "@day", day];
-
-    console.log(filter);
-    layers.forEach(function(l) {
-      map.setFilter(l, filter);
+    layers.forEach(function(layer) {
+      map.setFilter(layer, filter);
     })
-
+    console.log('by day', day);
   }
-
-
 
   // Add events.
   range.addEventListener('input', function() {
@@ -234,24 +249,49 @@ By mapping buildings, volunteers from all over the world contributed to the map,
   function play(v) {
     range.value = v;
     const date = moment(startDate).add(range.value, 'days');
-    time.innerHTML = date.format('DD-MM-YY');
+
+    var sum = 0;
+    for(var d = 0; d <= v; d++) {
+      sum += dayStats[d] || 0;
+    }
+
+    buildings.innerHTML = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    time.innerHTML = date.format('MMM D, YYYY');
     styleByDay(v);
   }
 
-  function flyHandler(id, center) {
+  function flyHandler(id, options) {
     var button = document.getElementById(id);
     button.addEventListener('click', function() {
-      map.flyTo({ center: center });
+      map.flyTo({
+        center: options.center,
+        zoom: options.zoom || 5
+      });
     });
+    console.log(options.startDay);
   }
 
-  flyHandler('botswana', [22.966, -21.918]);
-  flyHandler('zambia', [25.155, -13.605]);
-  flyHandler('zimbabwe', [27.234, -19.072]);
-  flyHandler('laos', [105.015, 16.009]);
-  flyHandler('cambodia', [103.272, 13.745]);
-  flyHandler('guatemala', [-91.302, 15.225]);
-  flyHandler('honduras', [-86.214, 15.330]);
+  flyHandler('botswana', {
+    center: [22.966, -21.918]
+  });
+  flyHandler('zambia', {
+    center: [25.155, -13.605]
+  });
+  flyHandler('zimbabwe', {
+    center: [27.234, -19.072]
+  });
+  flyHandler('laos', {
+    center: [105.015, 16.009]
+  });
+  flyHandler('cambodia', {
+    center: [103.272, 13.745]
+  });
+  flyHandler('guatemala', {
+    center: [-91.302, 15.225]
+  });
+  flyHandler('honduras', {
+    center: [-86.214, 15.330]
+  });
   </script>
 </body>
 
