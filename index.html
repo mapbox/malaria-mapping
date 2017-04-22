@@ -119,31 +119,31 @@ By mapping buildings, volunteers from all over the world contributed to the map,
         <p></p>
         <h2>Mapping Projects</h2>
         <p>Over 350'000 buildings have been mapped since 2016.</p>
-        <div onclick="flyZimbabwe()" class="button fill-navy-dark dark">
+        <div id="zimbabwe" class="button fill-navy-dark dark">
           <img class="flag" src="img/zimbabwe.png" alt="Zimbabwe" />
           <span> Zimbabwe</span>
         </div>
-        <div onclick="flyZambia()" class="button fill-navy-dark dark">
+        <div id="zambia" class="button fill-navy-dark dark">
           <img class="flag" src="img/zambia.png" alt="Zambia" />
           <span> Zambia</span>
         </div>
-        <div onclick="flyBotswana()" class="button fill-navy-dark dark">
+        <div id="botswana" class="button fill-navy-dark dark">
           <img class="flag" src="img/botswana.png" alt="Botswana" />
           <span> Botswana</span>
         </div>
-        <div class="button fill-navy-dark dark">
+        <div id="laos" class="button fill-navy-dark dark">
           <img class="flag" src="img/laos.png" alt="Laos" />
           <span> Laos</span>
         </div>
-        <div class="button fill-navy-dark dark">
+        <div id="cambodia" class="button fill-navy-dark dark">
           <img class="flag" src="img/cambodia.png" alt="Cambodia" />
           <span> Cambodia</span>
         </div>
-        <div class="button fill-navy-dark dark">
+        <div id="honduras" class="button fill-navy-dark dark">
           <img class="flag" src="img/honduras.png" alt="Honduras" />
           <span> Honduras</span>
         </div>
-        <div class="button fill-navy-dark dark">
+        <div id="guatemala" class="button fill-navy-dark dark">
           <img class="flag" src="img/guatemala.png" alt="Guatemala" />
           <span> Guatemala</span>
         </div>
@@ -238,18 +238,20 @@ By mapping buildings, volunteers from all over the world contributed to the map,
     styleByDay(v);
   }
 
-  function flyBotswana() {
-		map.flyTo({ center: [22.966, -21.918] });
+  function flyHandler(id, center) {
+    var button = document.getElementById(id);
+    button.addEventListener('click', function() {
+      map.flyTo({ center: center });
+    });
   }
 
-  function flyZambia(v) {
-		map.flyTo({ center: [25.155, -13.605] });
-  }
-
-  function flyZimbabwe(v) {
-		map.flyTo({ center: [27.234, -19.072] });
-  }
-
+  flyHandler('botswana', [22.966, -21.918]);
+  flyHandler('zambia', [25.155, -13.605]);
+  flyHandler('zimbabwe', [27.234, -19.072]);
+  flyHandler('laos', [105.015, 16.009]);
+  flyHandler('cambodia', [103.272, 13.745]);
+  flyHandler('guatemala', [-91.302, 15.225]);
+  flyHandler('honduras', [-86.214, 15.330]);
   </script>
 </body>
 
