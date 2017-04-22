@@ -87,25 +87,25 @@
     width: 100%;
   }
 
-	.sidebar {
-		position:absolute;
-		top:0;
-		bottom:0;
-		width: 360px;
-	}
-	.sidebar-inner {
-		display:-webkit-box;
-		display:flex;
-		-webkit-box-orient:vertical;
-		flex-direction:column;
-		height:100%;
-	}
-	.sidebar-inner .flex-scroll {
-		overflow-y:scroll;
-		min-height:0;
-		-webkit-box-flex:1;
-		flex:1;
-	}
+  .sidebar {
+    position:absolute;
+    top:0;
+    bottom:0;
+    width: 360px;
+  }
+  .sidebar-inner {
+    display:-webkit-box;
+    display:flex;
+    -webkit-box-orient:vertical;
+    flex-direction:column;
+    height:100%;
+  }
+  .sidebar-inner .flex-scroll {
+    overflow-y:scroll;
+    min-height:0;
+    -webkit-box-flex:1;
+    flex:1;
+  }
   </style>
 </head>
 
@@ -116,7 +116,8 @@
     <div class="flex-scroll scroll-styled pad2" id="narrative">
       <h1>Eliminating Malaria through Mapping</h1>
       <p>
-By mapping buildings, volunteers from all over the world contributed to the map, directly contributing to malaria elimination efforts.
+Volunteers from all over the world are contributing to eliminating Malaria by mapping buildings of the people in need.
+      <a href="https://www.hotosm.org/projects/malaria_elimination_campaign" target="_blank" style="color: rgba(19, 182, 238, 0.9); text-decoration: underline;">Start mapping!</a>
       </p>
       <div id="counter" class="dark center pad1 col3">
         <div class="clearfix space-bottom">
@@ -134,11 +135,7 @@ By mapping buildings, volunteers from all over the world contributed to the map,
 
       <div class="tourStop">
         <h2>Mapping Projects</h2>
-        <p>Over 350'000 buildings have been mapped since 2016.</p>
-        <div id="zimbabwe" class="button fill-navy-dark dark">
-          <img class="flag" src="img/zimbabwe.png" alt="Zimbabwe" />
-          <span> Zimbabwe</span>
-        </div>
+        <p>Over 1.5 million buildings have been mapped as part of the Malaria elimination campaign since 2016.</p>
         <div id="zambia" class="button fill-navy-dark dark">
           <img class="flag" src="img/zambia.png" alt="Zambia" />
           <span> Zambia</span>
@@ -147,6 +144,10 @@ By mapping buildings, volunteers from all over the world contributed to the map,
           <img class="flag" src="img/botswana.png" alt="Botswana" />
           <span> Botswana</span>
         </div>
+        <!--<div id="zimbabwe" class="button fill-navy-dark dark">
+          <img class="flag" src="img/zimbabwe.png" alt="Zimbabwe" />
+          <span> Zimbabwe</span>
+        </div>-->
         <div id="laos" class="button fill-navy-dark dark">
           <img class="flag" src="img/laos.png" alt="Laos" />
           <span> Laos</span>
@@ -191,24 +192,53 @@ By mapping buildings, volunteers from all over the world contributed to the map,
   var max = range.max;
 
   var dayStats = {};
-  loadBuildingStats(function(stats) {
-    map.on('load', function() {
-      playControl.addEventListener('click', setPlay);
-      dayStats = stats;
-      styleByDay(0);
-    });
-  });
-  // Trigger automation
-  setPlay();
 
-  function styleByDay(day) {
+  var styleByDay = throttle(function (day) {
     var layers = ['malaria-building-point', 'malaria-building-glow', 'malaria-building-shape'];
     var filter = ["<=", "@day", day];
-    layers.forEach(function(layer) {
-      map.setFilter(layer, filter);
-    })
-    console.log('by day', day);
+
+    if (map.loaded()) {
+      layers.forEach(function(layer) {
+        map.setFilter(layer, filter);
+      });
+    }
+  }, 400);
+
+  var updateCounts = throttle(function(total, date) {
+    buildings.innerHTML = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    time.innerHTML = date.format('MMM D, YYYY');
+  }, 150);
+
+  function play(v) {
+    range.value = v;
+    var date = moment(startDate).add(range.value, 'days');
+
+    var sum = 0;
+    for(var d = 0; d <= v; d++) {
+      sum += dayStats[d] || 0;
+    }
+    updateCounts(sum, date);
+    styleByDay(v);
   }
+
+  loadBuildingStats(function(stats) {
+    dayStats = stats;
+    map.on('load', function() {
+      styleByDay(0);
+      playControl.addEventListener('click', setPlay);
+
+      setTimeout(function() {
+        setPlay(50);
+      }, 500);
+    });
+  });
+
+  map.on('zoomend', function() {
+    var zoom = map.getZoom();
+    if(zoom <= 5) {
+      setSpeed(50);
+    }
+  });
 
   // Add events.
   range.addEventListener('input', function() {
@@ -228,7 +258,6 @@ By mapping buildings, volunteers from all over the world contributed to the map,
     xmlhttp.send();
   }
 
-
   function clearPlayback() {
     window.clearInterval(playback);
     playControl.classList.remove('pause');
@@ -236,28 +265,47 @@ By mapping buildings, volunteers from all over the world contributed to the map,
     playback = false;
   }
 
-  function setPlay() {
+  function setSpeed(speed) {
+    console.log('Set speed', speed);
+    clearPlayback();
+    playback = window.setInterval(function() {
+      var value = parseInt(range.value, 10);
+      play(value + 1);
+    }, speed);
+  }
+
+  function setPlay(speed) {
+    speed = parseInt(speed) || 200;
     if (playback) return clearPlayback();
     playControl.classList.remove('play');
     playControl.classList.add('pause');
     playback = window.setInterval(function() {
       var value = parseInt(range.value, 10);
       play(value + 1);
-    }, 400);
+    }, speed);
   }
 
-  function play(v) {
-    range.value = v;
-    const date = moment(startDate).add(range.value, 'days');
+  function throttle(fn, threshhold, scope) {
+    threshhold || (threshhold = 250);
+    var last,
+        deferTimer;
+    return function () {
+      var context = scope || this;
 
-    var sum = 0;
-    for(var d = 0; d <= v; d++) {
-      sum += dayStats[d] || 0;
-    }
-
-    buildings.innerHTML = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    time.innerHTML = date.format('MMM D, YYYY');
-    styleByDay(v);
+      var now = +new Date,
+          args = arguments;
+      if (last && now < last + threshhold) {
+        // hold on to it
+        clearTimeout(deferTimer);
+        deferTimer = setTimeout(function () {
+          last = now;
+          fn.apply(context, args);
+        }, threshhold);
+      } else {
+        last = now;
+        fn.apply(context, args);
+      }
+    };
   }
 
   function flyHandler(id, options) {
@@ -267,30 +315,58 @@ By mapping buildings, volunteers from all over the world contributed to the map,
         center: options.center,
         zoom: options.zoom || 5
       });
+      if (options.startDay) {
+        console.log('Play from day', options.startDay);
+        play(options.startDay);
+      }
+      if (options.speed) {
+        setSpeed(options.speed);
+      }
     });
-    console.log(options.startDay);
   }
 
   flyHandler('botswana', {
-    center: [22.966, -21.918]
+    center: [22.966, -21.918],
+    zoom: 5.5,
+    startDay: 140,
+    speed: 450
   });
   flyHandler('zambia', {
-    center: [25.155, -13.605]
+    center: [25.155, -13.605],
+    startDay: 210,
+    zoom: 5.5,
+    speed: 450
   });
+  /*
   flyHandler('zimbabwe', {
-    center: [27.234, -19.072]
+    center: [27.234, -19.072],
+    zoom: 5.5,
+    speed: 300
   });
+  */
   flyHandler('laos', {
-    center: [105.015, 16.009]
+    center: [105.9620, 16.6489],
+    zoom: 8.4,
+    startDay: 90,
+    speed: 300
   });
   flyHandler('cambodia', {
-    center: [103.272, 13.745]
+    center: [104.5779, 11.8601],
+    zoom: 7,
+    startDay: 190,
+    speed: 500
   });
   flyHandler('guatemala', {
-    center: [-91.302, 15.225]
+    center: [-91.302, 15.225],
+    startDay: 60,
+    zoom: 7.5,
+    speed: 500
   });
   flyHandler('honduras', {
-    center: [-86.214, 15.330]
+    center: [-86.214, 15.330],
+    zoom: 6.5,
+    startDay: 190,
+    speed: 500
   });
   </script>
 </body>
