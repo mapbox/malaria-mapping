@@ -58,10 +58,11 @@ echo "update metadata set value=0 where name = 'minzoom'" | sqlite3 malaria_buil
 rm malaria_buildings_low.mbtiles
 ```
 
-7. Calculate buildings added by day and country
+7. Calculate buildings per day and total unique contributors
 
 ```bash
 ./building-totals.js -i malaria_buildings_day_centroid.geojson -o malaria_buildings_by_day.json
+./contributor-totals.js -i malaria_buildings_day_centroid.geojson -o malaria_contributors.json
 ```
 
 8. Upload the vector tiles to Mapbox
