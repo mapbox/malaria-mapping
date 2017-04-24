@@ -1,0 +1,109 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+#buildings {
+  color: rgba(19, 182, 238, 0.9);
+}
+
+#legend {
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.dark.button {
+  background-color: rgba(0, 12, 26, 0.41);
+}
+
+.button:hover, .button.active {
+  background-color: #52a1d8;
+}
+
+.fill-bg {
+  background-color: rgb(47, 48, 54);
+}
+
+.fill-control {
+  background-color: #505050;
+}
+
+.flag {
+  display: inline;
+  max-width: 30px;
+}
+
+@media (max-width: 700px) {
+  .projects {
+    display: none;
+  }
+}
+
+.projects .button {
+  display: inline-block;
+  min-width: 120px;
+  margin-right: 5px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.control-container {
+  padding: 0 0 0 40px;
+}
+
+.playback {
+  background-image: url(img/play.svg);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  width: 40px;
+  height: 40px;
+  border-color: rgba(0, 0, 0, 0.75);
+}
+
+.playback.pause {
+  background-image: url(img/pause.svg);
+}
+
+.playback:hover {
+  background-color: #373737;
+}
+
+.lifted {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
+}
+
+#counter {
+  width: 100%;
+}
+
+.sidebar {
+  min-height: 50px;
+}
+
+@media (min-width: 700px) {
+  .sidebar {
+    position:absolute;
+    top:0;
+    bottom:0;
+    width: 360px;
+  }
+  .sidebar-inner {
+    display:-webkit-box;
+    display:flex;
+    -webkit-box-orient:vertical;
+    flex-direction:column;
+    height:100%;
+  }
+  .sidebar-inner .flex-scroll {
+    overflow-y:scroll;
+    min-height:0;
+    -webkit-box-flex:1;
+    flex:1;
+  }
+}
