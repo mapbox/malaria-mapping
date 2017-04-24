@@ -2,7 +2,9 @@
 
 Visualize the mapping efforts of HOT and DigitalGlobe support of Malaria Elimination
 
-*:link: https://mapbox.com/malaria-mapping
+**:earth_africa: https://mapbox.com/malaria-mapping**
+
+See the [Tasking Manager](http://tasks.hotosm.org/?sort_by=priority&direction=asc&search=malaria+elimination) to learn how you can help and finish mapping 500,000 km2!
 
 ## Requirements
 
@@ -15,7 +17,7 @@ npm install .
 npm install -g osm-qa-filter
 ```
 
-## Workflow
+## Data Processing
 
 You can find the data processing scripts in `scripts`.
 
