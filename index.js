@@ -22,9 +22,7 @@ var time = document.getElementById('time');
 var buildings = document.getElementById('buildings');
 
 var startDate = new Date(2016, 6, 1);
-var tally = 0; // The current index in the layers array we are showing.
 var playback = false;
-var max = range.max;
 
 var dayStats = {};
 
@@ -66,7 +64,7 @@ loadBuildingStats(function(stats) {
   map.on('load', function() {
     // TODO: The query string parsing could be done nicer
     var minDay = isNaN(parseInt(getQueryVariable('minday'))) ? 160 : parseInt(getQueryVariable('minday'));
-    var day = isNaN(parseInt(getQueryVariable('day'))) ? 160 : parseInt(getQueryVariable('minday'));
+    var day = isNaN(parseInt(getQueryVariable('day'))) ? 160 : parseInt(getQueryVariable('day'));
     var speed = parseInt(getQueryVariable('speed')) || 130;
     range.min = minDay;
     console.log('minday', minDay, day, speed);
