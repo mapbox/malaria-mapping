@@ -27,7 +27,7 @@ body {
 }
 
 .fill-bg {
-  background-color: rgb(47, 48, 54);
+  background-color: #222630;
 }
 
 .fill-control {
@@ -37,6 +37,8 @@ body {
 .flag {
   display: inline;
   max-width: 30px;
+  padding-top: 2px;
+  padding-right: 5px;
 }
 
 @media (max-width: 700px) {
