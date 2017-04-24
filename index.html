@@ -111,7 +111,7 @@
 
 <body>
 
-<div class="sidebar pin-topleft pin-bottomleft z1">
+<div id="sidebar" class="sidebar pin-topleft pin-bottomleft z1">
   <div class="sidebar-inner fill-bg dark round sidebar-inner">
     <div class="flex-scroll scroll-styled pad2" id="narrative">
       <h1>Eliminating Malaria through Mapping</h1>
@@ -171,6 +171,7 @@ Volunteers from all over the world are contributing to eliminating Malaria by ma
   <div id="map"></div>
   <script>
   var mobile = document.documentElement.clientHeight <= 500;
+
   mapboxgl.accessToken = 'pk.eyJ1IjoibHVrYXNtYXJ0aW5lbGxpIiwiYSI6ImNqMXMyYTRuejAwOHkzM3Frbjg1ZW9kNnAifQ.F5tkdGnKJMv4yaYZNOTJ5w';
   window.map = new mapboxgl.Map({
     container: "map", // container id
@@ -181,6 +182,11 @@ Volunteers from all over the world are contributing to eliminating Malaria by ma
     minZoom: 1,
     hash: true
   });
+
+  var sidebar = document.getElementById('sidebar');
+  if (getQueryVariable('sidebar') === 'no') {
+    sidebar.style.display = "none";
+  }
 
   var playControl = document.getElementById('play-control');
   var range = document.getElementById('range');
