@@ -50,7 +50,13 @@
     max-width: 30px;
   }
 
-  .tourStop .button {
+  @media (max-width: 700px) {
+    .projects {
+      display: none;
+    }
+  }
+
+  .projects .button {
     display: inline-block;
     min-width: 120px;
     margin-right: 5px;
@@ -88,30 +94,36 @@
   }
 
   .sidebar {
-    position:absolute;
-    top:0;
-    bottom:0;
-    width: 360px;
+    min-height: 50px;
   }
-  .sidebar-inner {
-    display:-webkit-box;
-    display:flex;
-    -webkit-box-orient:vertical;
-    flex-direction:column;
-    height:100%;
-  }
-  .sidebar-inner .flex-scroll {
-    overflow-y:scroll;
-    min-height:0;
-    -webkit-box-flex:1;
-    flex:1;
+
+  @media (min-width: 700px) {
+    .sidebar {
+      position:absolute;
+      top:0;
+      bottom:0;
+      width: 360px;
+    }
+    .sidebar-inner {
+      display:-webkit-box;
+      display:flex;
+      -webkit-box-orient:vertical;
+      flex-direction:column;
+      height:100%;
+    }
+    .sidebar-inner .flex-scroll {
+      overflow-y:scroll;
+      min-height:0;
+      -webkit-box-flex:1;
+      flex:1;
+    }
   }
   </style>
 </head>
 
 <body>
 
-<div id="sidebar" class="sidebar pin-topleft pin-bottomleft z1">
+<div id="sidebar" class="sidebar pin-topleft z1">
   <div class="sidebar-inner fill-bg dark round sidebar-inner">
     <div class="flex-scroll scroll-styled pad2" id="narrative">
       <h1>Eliminating Malaria through Mapping</h1>
@@ -133,7 +145,7 @@ Volunteers from all over the world are contributing to eliminating Malaria by ma
         <h3 class="fancy" id="time">01-07-16</h3>
       </div>
 
-      <div class="tourStop">
+      <div class="projects">
         <h2>Mapping Projects</h2>
         <p>Over 1.5 million buildings have been mapped as part of the Malaria elimination campaign since 2016.</p>
         <div id="zambia" class="button fill-navy-dark dark">
@@ -170,7 +182,7 @@ Volunteers from all over the world are contributing to eliminating Malaria by ma
 </div>
   <div id="map"></div>
   <script>
-  var mobile = document.documentElement.clientHeight <= 500;
+  var mobile = document.documentElement.clientWidth <= 700;
 
   mapboxgl.accessToken = 'pk.eyJ1IjoibHVrYXNtYXJ0aW5lbGxpIiwiYSI6ImNqMXMyYTRuejAwOHkzM3Frbjg1ZW9kNnAifQ.F5tkdGnKJMv4yaYZNOTJ5w';
   window.map = new mapboxgl.Map({
@@ -186,6 +198,9 @@ Volunteers from all over the world are contributing to eliminating Malaria by ma
   var sidebar = document.getElementById('sidebar');
   if (getQueryVariable('sidebar') === 'no') {
     sidebar.style.display = "none";
+  }
+  if (!mobile) {
+    sidebar.className += " pin-bottomleft";
   }
 
   var playControl = document.getElementById('play-control');
