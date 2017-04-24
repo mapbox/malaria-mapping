@@ -11,11 +11,7 @@ body {
 }
 
 #buildings {
-  color: rgba(19, 182, 238, 0.9);
-}
-
-#legend {
-  color: rgba(0, 0, 0, 0.75);
+  color: #4198d4;
 }
 
 .dark.button {
