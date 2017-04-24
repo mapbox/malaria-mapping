@@ -1,5 +1,5 @@
 {
-  "name": "malaria-elimination-timeline",
+  "name": "@mapbox/malaria-mapping",
   "version": "1.0.0",
   "description": "Visualize the mapping efforts of HOT and DigitalGlobe support of Malaria elimination",
   "main": "centroid.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mapbox/malaria-elimination-timeline.git"
+    "url": "git+https://github.com/mapbox/malaria-mapping.git"
   },
   "keywords": [
     "malaria",
@@ -20,9 +20,9 @@
   "author": "Lukas Martinelli <me@lukasmartinelli.ch>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mapbox/malaria-elimination-timeline/issues"
+    "url": "https://github.com/mapbox/malaria-mapping/issues"
   },
-  "homepage": "https://github.com/mapbox/malaria-elimination-timeline#readme",
+  "homepage": "https://github.com/mapbox/malaria-mapping#readme",
   "dependencies": {
     "@turf/turf": "^4.1.0",
     "commander": "^2.9.0",
