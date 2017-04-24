@@ -144,10 +144,10 @@ Volunteers from all over the world are contributing to eliminating Malaria by ma
           <img class="flag" src="img/botswana.png" alt="Botswana" />
           <span> Botswana</span>
         </div>
-        <!--<div id="zimbabwe" class="button fill-navy-dark dark">
+        <div id="zimbabwe" class="button fill-navy-dark dark">
           <img class="flag" src="img/zimbabwe.png" alt="Zimbabwe" />
           <span> Zimbabwe</span>
-        </div>-->
+        </div>
         <div id="laos" class="button fill-navy-dark dark">
           <img class="flag" src="img/laos.png" alt="Laos" />
           <span> Laos</span>
@@ -220,6 +220,11 @@ Volunteers from all over the world are contributing to eliminating Malaria by ma
     }
     updateCounts(sum, date);
     styleByDay(v);
+
+    // If range hit's the end show play button again
+    if (parseInt(range.value) >= parseInt(range.max)) {
+      clearPlayback();
+    }
   }
 
   loadBuildingStats(function(stats) {
@@ -279,6 +284,10 @@ Volunteers from all over the world are contributing to eliminating Malaria by ma
   }
 
   function setPlay(speed) {
+    if (parseInt(range.value) >= parseInt(range.max)) {
+      range.value = 0;
+    }
+
     speed = parseInt(speed) || 200;
     if (playback) return clearPlayback();
     playControl.classList.remove('play');
@@ -341,13 +350,11 @@ Volunteers from all over the world are contributing to eliminating Malaria by ma
     zoom: 5.5,
     speed: 450
   });
-  /*
   flyHandler('zimbabwe', {
     center: [27.234, -19.072],
     zoom: 5.5,
     speed: 300
   });
-  */
   flyHandler('laos', {
     center: [105.9620, 16.6489],
     zoom: 8.4,
