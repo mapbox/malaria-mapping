@@ -29,20 +29,26 @@ osm-qa-filter \
     --filter '["all", ["has", "building"], [">=", "@timestamp", 1467331200]]'
 ```
 
-3. Add the date as attribute to the features.
+3. Filter to the mapped area
 
 ```bash
-./day.js -i malaria_buildings.geojson -o malaria_buildings_day.geojson
+./filter-area.js -i malaria_buildings.geojson -o malaria_buildings_filtered.geojson
+```
+
+4. Add the date as attribute to the features.
+
+```bash
+./day.js -i malaria_buildings_filtered.geojson -o malaria_buildings_day.geojson
 ```
 
 
-4. Calculate centroids of all the buildings
+5. Calculate centroids of all the buildings
 
 ```bash
 ./centroid.js -i malaria_buildings_day.geojson -o malaria_buildings_day_centroid.geojson
 ```
 
-5. Encode vector tiles (polygons for high zoom levels and points for low zoom levels) and stitch them back together into a single MBTiles.
+6. Encode vector tiles (polygons for high zoom levels and points for low zoom levels) and stitch them back together into a single MBTiles.
 
 ```bash
 tippecanoe --layer malaria_building -o malaria_buildings.mbtiles --include "@day" --minimum-zoom=11 --maximum-zoom=13 < malaria_buildings_day.geojson
@@ -52,11 +58,10 @@ echo "update metadata set value=0 where name = 'minzoom'" | sqlite3 malaria_buil
 rm malaria_buildings_low.mbtiles
 ```
 
-6. Upload the vector tiles to Mapbox
-
 7. Calculate buildings added by day and country
 
 ```bash
 ./building-totals.js -i malaria_buildings_day_centroid.geojson -o malaria_buildings_by_day.json
 ```
 
+8. Upload the vector tiles to Mapbox
