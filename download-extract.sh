@@ -44,6 +44,7 @@ function download_files() {
     cp zambia.mbtiles "$dest"
 
     merge zambia.mbtiles "$dest"
+    merge zimbabwe.mbtiles "$dest"
     merge botswana.mbtiles "$dest"
     merge laos.mbtiles "$dest"
     merge cambodia.mbtiles "$dest"
