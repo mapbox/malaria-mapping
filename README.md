@@ -2,6 +2,8 @@
 
 Visualize the mapping efforts of HOT and DigitalGlobe support of Malaria Elimination
 
+*:link: https://mapbox.com/malaria-mapping
+
 ## Requirements
 
 - SQLite 3
@@ -14,6 +16,12 @@ npm install -g osm-qa-filter
 ```
 
 ## Workflow
+
+You can find the data processing scripts in `scripts`.
+
+```bash
+cd ./scripts
+```
 
 1. Prepare the QA tiles extract for the affected regions
 
@@ -65,4 +73,4 @@ rm malaria_buildings_low.mbtiles
 ./contributor-totals.js -i malaria_buildings_day.geojson -o malaria_contributors.json
 ```
 
-8. Upload the vector tiles to Mapbox
+8. Upload the vector tiles to Mapbox Studio!
