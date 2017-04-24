@@ -61,8 +61,8 @@ rm malaria_buildings_low.mbtiles
 7. Calculate buildings per day and total unique contributors
 
 ```bash
-./building-totals.js -i malaria_buildings_day_centroid.geojson -o malaria_buildings_by_day.json
-./contributor-totals.js -i malaria_buildings_day_centroid.geojson -o malaria_contributors.json
+./building-totals.js -i malaria_buildings_day.geojson -o malaria_buildings_by_day.json
+./contributor-totals.js -i malaria_buildings_day.geojson -o malaria_contributors.json
 ```
 
 8. Upload the vector tiles to Mapbox
