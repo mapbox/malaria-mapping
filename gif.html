@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <meta charset=utf-8 />
+  <title>Malaria Mapping</title>
+  <link href='https://www.mapbox.com/base/latest/base.css' rel='stylesheet' />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.css' rel='stylesheet' />
+  <link href='index.css' rel='stylesheet' />
+</head>
+<style>
+#sidebar {
+	width: 270px;
+	height: 160px;
+}
+</style>
+<body>
+<div id="sidebar" class="pin-topleft z1">
+  <div class="sidebar-inner fill-bg dark round sidebar-inner">
+    <div class="pad1" id="narrative">
+      <h2 style="text-align: center;">Eliminating Malaria through Mapping</h2>
+      <div id="counter" class="dark center pad1 col3">
+        <div id="player" style="display: none" class="clearfix space-bottom">
+          <div class="contain control-container round fill-control lifted">
+            <button id="play-control" class="button playback play pin-bottomleft round-left keyline-right"></button>
+            <div class="pad1y pad2x contain round-right">
+              <input id="range" class="col12" type="range" min="0" max="297" step="1" value="0">
+            </div>
+          </div>
+        </div>
+        <h3 class="fancy" id="buildings">5012</h3>
+        <h4 class="fancy" id="time">DEC 8, 2016</h4>
+      </div>
+    </div>
+  </div>
+</div>
+  <div id="map"></div>
+  <script src='index.js'></script>
+</body>
+
+</html>

@@ -159,6 +159,7 @@ function throttle(fn, threshhold, scope) {
 
 function flyHandler(id, options) {
 	var button = document.getElementById(id);
+  if(!button) return;
 	button.addEventListener('click', function() {
 		map.flyTo({
 			center: options.center,
