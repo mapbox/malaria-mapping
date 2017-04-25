@@ -4,6 +4,8 @@ Visualize the mapping efforts of HOT and DigitalGlobe support of Malaria Elimina
 
 **:earth_africa: https://mapbox.com/malaria-mapping**
 
+**:book:** https://www.mapbox.com/blog/world-malaria-day
+
 See the [Tasking Manager](http://tasks.hotosm.org/?sort_by=priority&direction=asc&search=malaria+elimination) to learn how you can help and finish mapping 500,000 km2!
 
 ![Malaria mapping progress](https://cloud.githubusercontent.com/assets/22896/25358290/e1203e0e-290e-11e7-81a2-ee7758a88f43.gif)
