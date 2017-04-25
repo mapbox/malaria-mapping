@@ -11,11 +11,13 @@ window.map = new mapboxgl.Map({
   hash: true
 });
 
-window.map.addControl(new mapboxgl.NavigationControl());
 
 var sidebar = document.getElementById('sidebar');
 if (!mobile) {
+  window.map.addControl(new mapboxgl.NavigationControl());
   sidebar.className += " pin-bottomleft";
+} else {
+  window.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 }
 
 var playControl = document.getElementById('play-control');
