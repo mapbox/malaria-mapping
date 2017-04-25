@@ -11,6 +11,8 @@ window.map = new mapboxgl.Map({
   hash: true
 });
 
+window.map.addControl(new mapboxgl.NavigationControl());
+
 var sidebar = document.getElementById('sidebar');
 if (!mobile) {
   sidebar.className += " pin-bottomleft";
