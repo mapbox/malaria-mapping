@@ -26,6 +26,7 @@
   "dependencies": {
     "@turf/turf": "^4.1.0",
     "commander": "^2.9.0",
+    "csv-write-stream": "^2.0.0",
     "progress-stream": "^2.0.0",
     "split": "^1.0.0",
     "stringify-stream": "^1.0.5",

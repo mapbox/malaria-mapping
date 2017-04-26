@@ -80,3 +80,14 @@ rm malaria_buildings_low.mbtiles
 ```
 
 8. Upload the vector tiles to Mapbox Studio!
+
+## Generate Daily Statistics
+
+You can find the data processing scripts in `scripts`.
+
+```bash
+cd ./scripts
+./generate-day-stats.sh
+```
+
+This will generate a CSV file with daily statistics to show the progress.
