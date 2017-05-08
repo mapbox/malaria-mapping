@@ -68,14 +68,14 @@ osm-qa-filter \
 tippecanoe --layer malaria_building -o malaria_buildings.mbtiles --include "@day" --minimum-zoom=11 --maximum-zoom=13 < malaria_buildings_day.geojson
 tippecanoe --layer malaria_building -o malaria_buildings_low.mbtiles --include "@day" --minimum-zoom=0 --maximum-zoom=10 < malaria_buildings_day_centroid.geojson
 ./patch.sh malaria_buildings_low.mbtiles malaria_buildings.mbtiles
-echo "update metadata set value=0 where name = 'minzoom'" | sqlite3 malaria_buildings.mbtiles
+echo "update metadata set value=0 where name = 'minzoom';" | sqlite3 malaria_buildings.mbtiles
 rm malaria_buildings_low.mbtiles
 ```
 
 7. Calculate buildings per day and total unique contributors
 
 ```bash
-./building-totals.js -i malaria_buildings_day.geojson -o malaria_buildings_by_day.json
+./building-totals.js -i malaria_buildings_day_centroid.geojson -o malaria_buildings_by_day.json
 ./contributor-totals.js -i malaria_buildings_day.geojson -o malaria_contributors.json
 ```
 
