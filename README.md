@@ -2,7 +2,7 @@
 
 Visualize the mapping efforts of HOT and DigitalGlobe support of Malaria Elimination
 
-**:earth_africa: https://mapbox.com/malaria-mapping**
+**:earth_africa: https://labs.mapbox.com/malaria-mapping**
 
 **:book:** https://www.mapbox.com/blog/world-malaria-day
 
